@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: da590cfab525b244781568f54cf8800b
+guid: 84ee32c550a55844a8019f9270549705
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -116,64 +116,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: play_text_0
+      name: roman_shield_slam_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 0
-        width: 635
-        height: 153
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 8
+        y: 13
+        width: 443
+        height: 309
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9393c881b3e47584ba0ca44ccf39b0f5
-      internalID: 806134517
+      spriteID: 918ad6fe5c8afe44dbd2d45606ad0596
+      internalID: -1757383047
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: play_text_1
+      name: roman_shield_slam_1
       rect:
         serializedVersion: 2
-        x: 682
-        y: 107
-        width: 43
-        height: 42
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 601
+        y: 15
+        width: 443
+        height: 309
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 929a2b76fd67b9e46895a76ce7e837d0
-      internalID: 187192330
+      spriteID: 3d9f6ac99b4208b40aaa45a449ba4dc8
+      internalID: 414815498
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: play_text_2
+      name: roman_shield_slam_2
       rect:
         serializedVersion: 2
-        x: 685
-        y: 38
-        width: 43
-        height: 42
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1145
+        y: 13
+        width: 440
+        height: 307
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bc013f485172644d8736c702058c260
-      internalID: -955094869
+      spriteID: c34cc7ecaa820a341bad82be35f94741
+      internalID: -1057670528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: roman_shield_slam_3
+      rect:
+        serializedVersion: 2
+        x: 1719
+        y: 15
+        width: 429
+        height: 303
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cfababed45d9a4438f430ad2cb68cfd
+      internalID: -1603223441
       vertices: []
       indices: 
       edges: []
@@ -189,9 +210,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      play_text_2: -955094869
-      play_text_1: 187192330
-      play_text_0: 806134517
+      roman_shield_slam_3: -1603223441
+      roman_shield_slam_2: -1057670528
+      roman_shield_slam_1: 414815498
+      roman_shield_slam_0: -1757383047
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

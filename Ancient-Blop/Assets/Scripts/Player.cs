@@ -16,17 +16,24 @@ public class Player : MonoBehaviour
     private string WALK_ANIMATION = "Walk";
     private string JUMP_ANIMATION = "Jump";
     private string ATTACK_ANIMATION = "Attack";
+    private string SHIELD_SLAM_ANIMATION = "ShieldSlam";
 
     private bool isGrounded = true;
+    private bool isSlaming = false;
 
     private Animator animator;
     private SpriteRenderer sp;
     private Rigidbody2D playerBody;
+    private HealthBar healthBar;
 
     [SerializeField]
     private Transform attackPoint;
     [SerializeField]
+    private Transform shieldAttackPoint;
+    [SerializeField]
     private Vector2 boxSize;
+    [SerializeField]
+    private Vector2 shieldBoxSize;
     private float angle = 0f;
     [SerializeField]
     private LayerMask enemyLayers;
@@ -41,24 +48,46 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         sp = GetComponent<SpriteRenderer>();
         playerBody = GetComponent<Rigidbody2D>();
+        healthBar = GetComponent<HealthBar>();
     }
+
+    void Start()
+    {
+        healthBar.setMaxHealth(100);
+    }
+    
 
     // Update is called once per frame
     void Update()
     {
-        MoveViaKeyboard();
-        PlayerAnimate();
-        PlayerJump();
-
-        if (Time.time >= nextAttackTime)
+        if (!isSlaming)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                StartCoroutine(PlayerAttack());
-                nextAttackTime = Time.time + oneAttackTime;
-            }
+        MoveViaKeyboard();
+        PlayerJump();
         }
-    }
+
+        PlayerAnimate();
+
+        if (isGrounded)
+        {
+                if (Time.time >= nextAttackTime)
+                {
+                    if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        StartCoroutine(PlayerAttack());
+                        nextAttackTime = Time.time + oneAttackTime;
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        StartCoroutine(PlayerShieldSlam());
+                        nextAttackTime = Time.time + oneAttackTime;
+                    }
+                }
+            }
+
+        }
+
     // should use fixed update for jump, but encountered problems
 
     /*void FixedUpdate()
@@ -127,6 +156,15 @@ public class Player : MonoBehaviour
             animator.SetBool(ATTACK_ANIMATION, false);
         }
 
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            animator.SetBool(SHIELD_SLAM_ANIMATION, true);
+        }
+        else
+        {
+            animator.SetBool(SHIELD_SLAM_ANIMATION, false);
+        }
+
     }
 
     void PlayerJump()
@@ -147,15 +185,31 @@ public class Player : MonoBehaviour
           
         foreach (Collider2D enemy in hitEnemies)
         {
-            Debug.Log("hit" + enemy);
+            Debug.Log("hit " + enemy);
             enemy.GetComponent<Blop>().BlopTakeDamage(PlayerAttackDamage);
         }
+    }
+
+    IEnumerator PlayerShieldSlam()
+    {
+        isSlaming = true;
+        yield return new WaitForSeconds(0.3f);
+
+        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(shieldAttackPoint.position, shieldBoxSize, angle, enemyLayers);
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log("Shield hit " + enemy);
+            StartCoroutine(enemy.GetComponent<Blop>().BlopKnockback(transform));
+        }
+        isSlaming = false;   
     }
 
     public void PlayerTakeDamage(int enemyAttackPower)
     {
         PlayerHealth -= enemyAttackPower;
         Debug.Log("player health " + PlayerHealth);
+        healthBar.setHealth(PlayerHealth);
         if (PlayerHealth <= 0)
         {
             Destroy(gameObject);
@@ -178,5 +232,6 @@ public class Player : MonoBehaviour
             return;
 
         Gizmos.DrawWireCube(attackPoint.position, boxSize);
+        Gizmos.DrawWireCube(shieldAttackPoint.position, shieldBoxSize);
     }
 }

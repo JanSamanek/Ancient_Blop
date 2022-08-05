@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: da590cfab525b244781568f54cf8800b
+guid: df6f5fff7cff1c94a914cca3487786a8
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -116,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: play_text_0
+      name: Clouds_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 0
-        width: 635
-        height: 153
+        x: 213
+        y: 644
+        width: 1158
+        height: 535
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,20 +130,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9393c881b3e47584ba0ca44ccf39b0f5
-      internalID: 806134517
+      spriteID: e4567afaf54c5ab49b879b642aa63636
+      internalID: 1795804958
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: play_text_1
+      name: Clouds_1
       rect:
         serializedVersion: 2
-        x: 682
-        y: 107
-        width: 43
-        height: 42
+        x: 1749
+        y: 644
+        width: 869
+        height: 535
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -151,20 +151,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 929a2b76fd67b9e46895a76ce7e837d0
-      internalID: 187192330
+      spriteID: 0a14e5e37560c7e449a7b76138b7e371
+      internalID: 1882696336
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: play_text_2
+      name: Clouds_2
       rect:
         serializedVersion: 2
-        x: 685
-        y: 38
-        width: 43
-        height: 42
+        x: 3430
+        y: 644
+        width: 725
+        height: 535
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -172,8 +172,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bc013f485172644d8736c702058c260
-      internalID: -955094869
+      spriteID: 15767ee2d20bc1b48840c3fd9bef1f59
+      internalID: -2042595167
       vertices: []
       indices: 
       edges: []
@@ -189,9 +189,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      play_text_2: -955094869
-      play_text_1: 187192330
-      play_text_0: 806134517
+      Clouds_0: 1795804958
+      Clouds_1: 1882696336
+      Clouds_2: -2042595167
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
