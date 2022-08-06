@@ -26,7 +26,7 @@ public class Blop : MonoBehaviour
     {
         myBody = GetComponent<Rigidbody2D>();
         BlopAnimator = GetComponent<Animator>();
-        healthBar = GetComponent<HealthBar>();
+        //healthBar = GetComponent<HealthBar>();
 
         speed = 7f;
     }
@@ -107,8 +107,7 @@ public class Blop : MonoBehaviour
     {
         if (collision.gameObject.CompareTag(PLAYER_TAG))
         {
-            collision.gameObject.GetComponent<Player>().PlayerTakeDamage(BlopAttackPower);
-            //collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(10f, 0f), ForceMode2D.Impulse);
+            StartCoroutine(collision.gameObject.GetComponent<Player>().PlayerTakeDamage(BlopAttackPower, transform));
         }
     }
 

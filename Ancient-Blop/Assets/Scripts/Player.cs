@@ -12,14 +12,16 @@ public class Player : MonoBehaviour
     private float movement_x;
 
     private string GROUND_TAG = "Ground";
-    //private string ENEMY_TAG = "Enemy";
+    private string ENEMY_TAG = "Enemy";
     private string WALK_ANIMATION = "Walk";
     private string JUMP_ANIMATION = "Jump";
     private string ATTACK_ANIMATION = "Attack";
     private string SHIELD_SLAM_ANIMATION = "ShieldSlam";
+    private string HURT_ANIMATION = "Hurt";
 
     private bool isGrounded = true;
     private bool isSlaming = false;
+    private bool isHurt = false;
 
     private Animator animator;
     private SpriteRenderer sp;
@@ -43,6 +45,10 @@ public class Player : MonoBehaviour
     private float oneAttackTime = 0.3f;
     private float nextAttackTime = 0f;
 
+    private float BlopSpeed;
+
+    private float hurtDir;
+
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -60,10 +66,15 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isSlaming)
+        if (!isSlaming && !isHurt)
         {
         MoveViaKeyboard();
         PlayerJump();
+        }
+        
+        if (isHurt)
+        {
+            PlayerMove(hurtDir * (5f + BlopSpeed));
         }
 
         PlayerAnimate();
@@ -99,6 +110,11 @@ public class Player : MonoBehaviour
     {
         movement_x = Input.GetAxisRaw("Horizontal");
         transform.position += new Vector3(movement_x, 0f, 0f) * speed * Time.deltaTime;
+    }
+
+    void PlayerMove(float PlayerSpeed)
+    {
+        transform.position += new Vector3(1f, 0f, 0f) * PlayerSpeed * Time.deltaTime;
     }
 
     
@@ -165,6 +181,16 @@ public class Player : MonoBehaviour
             animator.SetBool(SHIELD_SLAM_ANIMATION, false);
         }
 
+        if (isHurt)
+        {
+            animator.SetBool(JUMP_ANIMATION, false);
+            animator.SetBool(HURT_ANIMATION, true);
+        }
+        else
+        {
+            animator.SetBool(HURT_ANIMATION, false);
+        }
+
     }
 
     void PlayerJump()
@@ -193,6 +219,7 @@ public class Player : MonoBehaviour
     IEnumerator PlayerShieldSlam()
     {
         isSlaming = true;
+
         yield return new WaitForSeconds(0.3f);
 
         Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(shieldAttackPoint.position, shieldBoxSize, angle, enemyLayers);
@@ -205,15 +232,18 @@ public class Player : MonoBehaviour
         isSlaming = false;   
     }
 
-    public void PlayerTakeDamage(int enemyAttackPower)
+    public IEnumerator PlayerTakeDamage(int enemyAttackPower, Transform t)
     {
+        hurtDir = (transform.position - t.position).normalized.x;
+        isHurt = true;
         PlayerHealth -= enemyAttackPower;
-        Debug.Log("player health " + PlayerHealth);
         healthBar.setHealth(PlayerHealth);
         if (PlayerHealth <= 0)
         {
             Destroy(gameObject);
         }
+        yield return new WaitForSeconds(0.7f);
+        isHurt = false;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -222,6 +252,11 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag(GROUND_TAG))
         {
             isGrounded = true;
+        }
+
+        if (collision.gameObject.CompareTag(ENEMY_TAG))
+        {
+            BlopSpeed = collision.gameObject.GetComponent<Blop>().speed;
         }
     }
 
