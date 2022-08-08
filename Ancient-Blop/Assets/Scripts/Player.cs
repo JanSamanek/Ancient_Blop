@@ -79,24 +79,28 @@ public class Player : MonoBehaviour
 
         if (isHurt)
         {
-            PlayerMove(hurtDir * (5f + BlopSpeed));
+            PlayerMove(hurtDir * (5f + Mathf.Abs(BlopSpeed)));
         }
 
         PlayerAnimate();
 
         if (isGrounded && !isHurt)
         {
-            readyToAttack = false;
-            if (Time.time >= nextAttackTime)
+            if (Time.time >= nextShieldTime)
             {
-                readyToAttack = true;
-                if (Input.GetKeyDown(KeyCode.Q))
+                readyToAttack = false;
+                if (Time.time >= nextAttackTime)
                 {
-                    StartCoroutine(PlayerAttack());
-                    nextAttackTime = Time.time + oneAttackTime;
-                }
+                    readyToAttack = true;
+                    if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        StartCoroutine(PlayerAttack());
+                        nextAttackTime = Time.time + oneAttackTime;
+                    }
 
+                }
             }
+
             if(Time.time >= (nextAttackTime / 2)) // To be able to stop attack animation halfway
             {
                 if (Time.time >= nextShieldTime)
@@ -252,11 +256,14 @@ public class Player : MonoBehaviour
         PlayerHealth -= enemyAttackPower;
         healthBar.setHealth(PlayerHealth);
         if (PlayerHealth <= 0)
-        {
-            PlayerDiedEvent();
+        {   
+            if(PlayerDiedEvent != null)
+            {
+                PlayerDiedEvent();   
+            }
             Destroy(gameObject);
         }
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(0.3f);
         isHurt = false;
     }
 

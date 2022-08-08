@@ -7,7 +7,7 @@ public class ScoreDisplay : MonoBehaviour
 {
     [SerializeField]
     Text scoreText;
-    static int score = 0;
+    public static int score = 0;
 
     // Update is called once per frame
     void Update()
@@ -25,9 +25,15 @@ public class ScoreDisplay : MonoBehaviour
         Blop.BlopDiedEvent -= BlopDiedReciever;
     }
 
-    void BlopDiedReciever()
+    void BlopDiedReciever(GameObject BlopType)
     {
-        Debug.Log("Blop Died");
-        score += 50;
+        if(BlopType.name == "Blop(Clone)")
+        {
+            score += 50;
+        }
+        else if (BlopType.name == "PurpleBlop(Clone)")
+        {
+            score += 100;
+        }
     }
 }

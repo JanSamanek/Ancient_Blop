@@ -10,7 +10,9 @@ public class EnemySpawner : MonoBehaviour
     private GameObject spawnedMonster;
 
     [SerializeField]
-    private Transform leftSpawn, rightSpawn;
+    private Transform leftSpawn;
+    [SerializeField]
+    private Transform rightSpawn;
 
     private int randomSide;
     private int randomIndex;
@@ -29,20 +31,33 @@ public class EnemySpawner : MonoBehaviour
 
             randomIndex = Random.Range(0, MonsterTypes.Length);
             randomSide = Random.Range(0, 2);
-
             spawnedMonster = Instantiate(MonsterTypes[randomIndex]);
 
             if (randomSide == 0)
             {
                 spawnedMonster.transform.position = leftSpawn.position;
-                spawnedMonster.GetComponent<Blop>().speed = Random.Range(4, 10);
+                if(randomIndex == 0)
+                {
+                    spawnedMonster.GetComponent<Blop>().speed = Random.Range(4, 10);
+                }
+                else if(randomIndex == 1)
+                {
+                    spawnedMonster.GetComponent<Blop>().speed = Random.Range(3, 6);
+                }
+
             }
-            else
+            else if(randomSide == 1)
             {
                 spawnedMonster.transform.position = rightSpawn.position;
-                spawnedMonster.GetComponent<Blop>().speed = -Random.Range(4, 8);
-                spawnedMonster.transform.localScale = new Vector3(-1f, 1f, 1f);
-                // another way to flip the monster not using sprite editor
+                spawnedMonster.transform.localScale = new Vector3(-1f, 1f, 1f); // another way to flip the monster not using sprite editor
+                if (randomIndex == 0)
+                {
+                    spawnedMonster.GetComponent<Blop>().speed = -Random.Range(4, 10);
+                }
+                else if (randomIndex == 1)
+                {
+                    spawnedMonster.GetComponent<Blop>().speed = -Random.Range(3, 6);
+                }
             }
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Blop : MonoBehaviour
 {
-    public delegate void BlopDied();
+    public delegate void BlopDied(GameObject BlopType);
     public static event BlopDied BlopDiedEvent;
 
     [HideInInspector]
@@ -90,7 +90,8 @@ public class Blop : MonoBehaviour
         {
             if (BlopDiedEvent != null)
             {
-                BlopDiedEvent();
+                Debug.Log(gameObject.name);
+                BlopDiedEvent(gameObject);
             }
             StartCoroutine(deathAnimation());
         }
