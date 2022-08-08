@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public delegate void PlayerDied();
+    public static event PlayerDied PlayerDiedEvent;
 
     [SerializeField]
     private float speed;
@@ -20,8 +22,9 @@ public class Player : MonoBehaviour
     private string HURT_ANIMATION = "Hurt";
 
     private bool isGrounded = true;
-    private bool isSlaming = false;
+    public static bool isSlaming = false;
     private bool isHurt = false;
+    private bool readyToAttack;
 
     private Animator animator;
     private SpriteRenderer sp;
@@ -44,6 +47,8 @@ public class Player : MonoBehaviour
     private int PlayerAttackDamage = 50;
     private float oneAttackTime = 0.3f;
     private float nextAttackTime = 0f;
+    private float oneShieldTime = 0.3f;
+    private float nextShieldTime = 0f;
 
     private float BlopSpeed;
 
@@ -61,17 +66,17 @@ public class Player : MonoBehaviour
     {
         healthBar.setMaxHealth(100);
     }
-    
+
 
     // Update is called once per frame
     void Update()
     {
         if (!isSlaming && !isHurt)
         {
-        MoveViaKeyboard();
-        PlayerJump();
+            MoveViaKeyboard();
+            PlayerJump();
         }
-        
+
         if (isHurt)
         {
             PlayerMove(hurtDir * (5f + BlopSpeed));
@@ -79,25 +84,33 @@ public class Player : MonoBehaviour
 
         PlayerAnimate();
 
-        if (isGrounded)
+        if (isGrounded && !isHurt)
         {
-                if (Time.time >= nextAttackTime)
+            readyToAttack = false;
+            if (Time.time >= nextAttackTime)
+            {
+                readyToAttack = true;
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    if (Input.GetKeyDown(KeyCode.Q))
-                    {
-                        StartCoroutine(PlayerAttack());
-                        nextAttackTime = Time.time + oneAttackTime;
-                    }
+                    StartCoroutine(PlayerAttack());
+                    nextAttackTime = Time.time + oneAttackTime;
+                }
 
+            }
+            if(Time.time >= (nextAttackTime / 2)) // To be able to stop attack animation halfway
+            {
+                if (Time.time >= nextShieldTime)
+                {
                     if (Input.GetKeyDown(KeyCode.W))
                     {
                         StartCoroutine(PlayerShieldSlam());
-                        nextAttackTime = Time.time + oneAttackTime;
+                        nextShieldTime = Time.time + oneShieldTime;
                     }
                 }
             }
 
         }
+    }
 
     // should use fixed update for jump, but encountered problems
 
@@ -163,7 +176,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) && readyToAttack)
         {
             animator.SetBool(ATTACK_ANIMATION, true);
         }
@@ -240,6 +253,7 @@ public class Player : MonoBehaviour
         healthBar.setHealth(PlayerHealth);
         if (PlayerHealth <= 0)
         {
+            PlayerDiedEvent();
             Destroy(gameObject);
         }
         yield return new WaitForSeconds(0.7f);

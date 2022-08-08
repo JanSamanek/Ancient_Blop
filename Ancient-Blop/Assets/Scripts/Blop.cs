@@ -4,36 +4,40 @@ using UnityEngine;
 
 public class Blop : MonoBehaviour
 {
+    public delegate void BlopDied();
+    public static event BlopDied BlopDiedEvent;
+
     [HideInInspector]
     public float speed;
-    private int BlopAttackPower = 20;
-    private int BlopHealth = 100;
+    public int BlopAttackPower;
+    public int BlopHealth;
 
     private string HURT_ANIMATION = "Hurt";
     private string DEATH_ANIMATION = "Death";
     private string PLAYER_TAG = "Player";
 
-    private bool isHurt = false;
-    private bool isKnockedback = false;
+    public bool isHurt = false;
+    public bool isKnockedback = false;
 
-    private float slamDir;
+    public float slamDir;
 
-    Rigidbody2D myBody;
-    Animator BlopAnimator;
+    public Rigidbody2D myBody;
+    public Animator BlopAnimator;
     HealthBar healthBar;
 
     void Awake()
     {
         myBody = GetComponent<Rigidbody2D>();
         BlopAnimator = GetComponent<Animator>();
-        //healthBar = GetComponent<HealthBar>();
 
         speed = 7f;
+        BlopAttackPower = 20;
+        BlopHealth = 100;
     }
 
     void Start()
     {
-       // healthBar.setMaxHealth(100);
+
     }
 
     // Update is called once per frame
@@ -78,18 +82,21 @@ public class Blop : MonoBehaviour
     public void BlopTakeDamage(int PlayerAttackDamage)
     {
         BlopHealth -= PlayerAttackDamage;
-        //healthBar.setHealth(BlopHealth);
         if (BlopHealth > 0)
         {
             StartCoroutine(hurtAnimation());
         }
         if (BlopHealth <= 0)
         {
+            if (BlopDiedEvent != null)
+            {
+                BlopDiedEvent();
+            }
             StartCoroutine(deathAnimation());
         }
     }
 
-    void BlopMove(float speedBlop)
+    public void BlopMove(float speedBlop)
     {
         transform.position += new Vector3(1f, 0f, 0f) * speedBlop * Time.deltaTime;
     }
@@ -105,9 +112,12 @@ public class Blop : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag(PLAYER_TAG))
+        if (!Player.isSlaming)
         {
-            StartCoroutine(collision.gameObject.GetComponent<Player>().PlayerTakeDamage(BlopAttackPower, transform));
+            if (collision.gameObject.CompareTag(PLAYER_TAG))
+            {
+                StartCoroutine(collision.gameObject.GetComponent<Player>().PlayerTakeDamage(BlopAttackPower, transform));
+            }
         }
     }
 
